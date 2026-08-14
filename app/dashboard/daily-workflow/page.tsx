@@ -298,7 +298,7 @@ export default function DailyWorkflowPage() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Dialog open={showQuickStart} onOpenChange={setShowQuickStart}>
                 <DialogTrigger asChild>
-                  <button className="inline-flex h-11 items-center gap-2 rounded-full bg-sol-gold px-5 text-sm font-semibold text-sol-night shadow-[0_12px_40px_-14px_rgba(246,199,107,0.9)] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sol-gold focus-visible:ring-offset-2 focus-visible:ring-offset-sol-night">
+                  <button className="inline-flex h-11 items-center gap-2 rounded-full bg-sol-gold px-5 text-sm font-semibold text-sol-night shadow-[0_12px_40px_-14px_rgba(239, 125, 69,0.9)] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sol-gold focus-visible:ring-offset-2 focus-visible:ring-offset-sol-night">
                     <Coffee className="h-4 w-4" />
                     Quick start
                   </button>
@@ -491,7 +491,7 @@ export default function DailyWorkflowPage() {
                       aria-hidden
                       className={`absolute -left-[27px] top-5 h-2.5 w-2.5 rounded-full border-2 ${
                         isNext
-                          ? "border-sol-gold bg-sol-gold shadow-[0_0_14px_rgba(246,199,107,0.8)]"
+                          ? "border-sol-gold bg-sol-gold shadow-[0_0_14px_rgba(239, 125, 69,0.8)]"
                           : isPast
                             ? "border-white/25 bg-sol-night"
                             : "border-white/40 bg-sol-night"

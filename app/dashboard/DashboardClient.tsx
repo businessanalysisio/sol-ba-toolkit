@@ -67,7 +67,7 @@ function AppSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
     <Sidebar className="border-r border-white/[0.06]">
       <SidebarHeader className="border-b border-white/[0.06] p-5">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sol-gold to-amber-500 text-slate-950 shadow-[0_8px_28px_-8px_rgba(246,199,107,0.8)]">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sol-gold to-sol-600 text-slate-950 shadow-[0_8px_28px_-8px_rgba(239, 125, 69,0.8)]">
             <BrainCircuit className="h-4 w-4" />
           </span>
           <span className="flex flex-col">
@@ -177,7 +177,7 @@ export function DashboardClient({ children }: { children: React.ReactNode }) {
             <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-background/65 px-5 backdrop-blur-xl">
               <SidebarTrigger className="-ml-1" />
               <div className="flex-1" />
-              <Button size="sm" className="rounded-full px-4 shadow-[0_8px_28px_-12px_rgba(246,199,107,0.8)]" asChild>
+              <Button size="sm" className="rounded-full px-4 shadow-[0_8px_28px_-12px_rgba(239, 125, 69,0.8)]" asChild>
                 <Link href="/brief-builder"><Plus className="mr-2 h-4 w-4" /> New brief</Link>
               </Button>
             </header>

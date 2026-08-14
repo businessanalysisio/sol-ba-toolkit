@@ -11,31 +11,42 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+        // Values come from the SOL Product Screens design system. Names are kept
+        // so the ~180 existing sol-* usages inherit the new identity; `gold` is
+        // now the orange accent, `mint` the teal.
         sol: {
-          night: '#080806',
-          ink: '#0d0d0a',
-          panel: '#12120f',
-          line: '#2a2a22',
-          gold: '#f6c76b',
-          mint: '#78e6c6',
-          coral: '#f26d6d',
-          violet: '#b8a7ff',
-          muted: '#aaa697',
-          // Numeric gold scale so components ported from sol-website
-          // (which reference sol-100..600) render in the gold identity.
-          '100': '#fbedc7',
-          '200': '#f9e3a8',
-          '300': '#f8d78a',
-          '400': '#f6c76b',
-          '500': '#e0a83e',
-          '600': '#c28a24',
+          night: '#0a0a0f',
+          ink: '#07070b',
+          panel: '#101014',
+          raised: '#16161b',
+          line: 'rgba(242, 239, 233, 0.09)',
+          gold: '#ef7d45',
+          mint: '#40c4a4',
+          coral: '#e5484d',
+          violet: '#9d8cf0',
+          muted: '#a39e94',
+          dim: '#6e6960',
+          text: '#d8d4cc',
+          fg: '#f2efe9',
+          info: '#4c9eeb',
+          warn: '#e5c158',
+          teal: '#40c4a4',
+          special: '#6a51c7',
+          // Numeric scale kept for components ported from sol-website, now
+          // stepping through the orange accent.
+          '100': '#fbe3d5',
+          '200': '#f8cdb4',
+          '300': '#f5ab86',
+          '400': '#f2925f',
+          '500': '#ef7d45',
+          '600': '#c75f2e',
         },
-        ember: '#f26d6d',
+        ember: '#e5484d',
         night: {
-          '700': '#2a2a22',
-          '800': '#12120f',
-          '900': '#0d0d0a',
-          '950': '#080806',
+          '700': '#1f1f26',
+          '800': '#16161b',
+          '900': '#101014',
+          '950': '#0a0a0f',
         },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -87,6 +98,11 @@ const config: Config = {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
+  		},
+  		fontFamily: {
+  			display: ['var(--font-display)', 'Noto Sans', 'Segoe UI', 'sans-serif'],
+  			sans: ['var(--font-body)', 'Noto Sans', 'Segoe UI', 'system-ui', 'sans-serif'],
+  			mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

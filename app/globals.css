@@ -3,15 +3,20 @@
 @tailwind utilities;
 
 html {
-  background: #080806;
+  background: #0a0a0f;
 }
 
 body {
   min-height: 100vh;
-  font-family: Inter, Geist, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-body), "Noto Sans", "Segoe UI", system-ui, sans-serif;
   background:
-    linear-gradient(180deg, rgba(246, 199, 107, 0.05), transparent 34rem),
-    #080806;
+    radial-gradient(ellipse at 0% 0%, rgba(239, 125, 69, 0.10), transparent 60%),
+    #0a0a0f;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display), "Noto Sans", "Segoe UI", sans-serif;
+  letter-spacing: -0.022em;
 }
 
 @layer utilities {
@@ -57,25 +62,25 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 45 15% 3%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --background: 240 22% 5%;
+    --foreground: 40 21% 93%;
+    --card: 240 14% 7%;
+    --card-foreground: 40 21% 93%;
+    --popover: 240 16% 6%;
+    --popover-foreground: 40 21% 93%;
+    --primary: 20 84% 60%;
+    --primary-foreground: 240 22% 5%;
+    --secondary: 240 10% 13%;
+    --secondary-foreground: 40 21% 93%;
+    --muted: 240 9% 12%;
+    --muted-foreground: 40 8% 61%;
+    --accent: 20 60% 16%;
+    --accent-foreground: 20 84% 60%;
+    --destructive: 358 75% 59%;
+    --destructive-foreground: 40 21% 93%;
+    --border: 240 8% 13%;
+    --input: 240 10% 16%;
+    --ring: 20 84% 60%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -115,38 +120,38 @@ body {
   }
 }
 
-/* ---- Utilities ported from sol-website, recolored to the gold/mint identity ---- */
+/* ---- App shell, on the SOL Product Screens identity: cool near-black ground,
+   orange accent, teal/violet/blue as the secondary section hues ---- */
 @layer components {
   .sol-app-shell {
-    --background: 222 33% 7%;
-    --foreground: 42 30% 94%;
-    --card: 222 28% 10%;
-    --card-foreground: 42 30% 94%;
-    --popover: 222 28% 9%;
-    --popover-foreground: 42 30% 94%;
-    --primary: 40 90% 66%;
-    --primary-foreground: 222 42% 8%;
-    --secondary: 220 21% 16%;
-    --secondary-foreground: 42 30% 94%;
-    --muted: 220 20% 14%;
-    --muted-foreground: 218 12% 65%;
-    --accent: 164 42% 18%;
-    --accent-foreground: 158 65% 78%;
-    --border: 220 19% 18%;
-    --input: 220 19% 20%;
-    --ring: 40 90% 66%;
-    --sidebar-background: 222 35% 6%;
-    --sidebar-foreground: 42 25% 90%;
-    --sidebar-primary: 40 90% 66%;
-    --sidebar-primary-foreground: 222 42% 8%;
-    --sidebar-accent: 220 22% 13%;
-    --sidebar-accent-foreground: 42 25% 94%;
-    --sidebar-border: 220 19% 15%;
-    --sidebar-ring: 40 90% 66%;
-    --radius: 0.9rem;
+    --background: 240 22% 5%;
+    --foreground: 40 21% 93%;
+    --card: 240 14% 7%;
+    --card-foreground: 40 21% 93%;
+    --popover: 240 16% 6%;
+    --popover-foreground: 40 21% 93%;
+    --primary: 20 84% 60%;
+    --primary-foreground: 240 22% 5%;
+    --secondary: 240 10% 13%;
+    --secondary-foreground: 40 21% 93%;
+    --muted: 240 9% 12%;
+    --muted-foreground: 40 8% 61%;
+    --accent: 20 60% 16%;
+    --accent-foreground: 20 84% 60%;
+    --border: 240 8% 13%;
+    --input: 240 10% 16%;
+    --ring: 20 84% 60%;
+    --sidebar-background: 240 24% 4%;
+    --sidebar-foreground: 40 18% 90%;
+    --sidebar-primary: 20 84% 60%;
+    --sidebar-primary-foreground: 240 22% 5%;
+    --sidebar-accent: 240 10% 11%;
+    --sidebar-accent-foreground: 40 21% 93%;
+    --sidebar-border: 240 10% 12%;
+    --sidebar-ring: 20 84% 60%;
+    --radius: 0.75rem;
     background:
-      radial-gradient(circle at 88% 0%, rgba(120, 230, 198, 0.08), transparent 28rem),
-      radial-gradient(circle at 20% -10%, rgba(246, 199, 107, 0.08), transparent 30rem),
+      radial-gradient(ellipse at 0% 0%, rgba(239, 125, 69, 0.12), transparent 60%),
       hsl(var(--background));
   }
 
@@ -158,11 +163,11 @@ body {
   }
 
   .sol-app-panel {
-    @apply border border-white/[0.07] bg-white/[0.035] shadow-[0_24px_80px_-42px_rgba(0,0,0,0.9)] backdrop-blur-sm;
+    @apply border border-white/[0.09] bg-white/[0.02] shadow-[0_24px_80px_-42px_rgba(0,0,0,0.95)] backdrop-blur-sm;
   }
 
   .sol-app-kicker {
-    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-sol-gold;
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-sol-gold;
   }
 
   .glass {
@@ -181,10 +186,10 @@ body {
     @apply mb-4 inline-flex items-center gap-2 rounded-full border border-sol-gold/20 bg-sol-gold/10 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-sol-gold;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sol-gold px-7 py-3.5 text-sm font-semibold text-sol-night shadow-[0_0_32px_-8px_rgba(246,199,107,0.6)] transition-all duration-300 hover:bg-white hover:shadow-[0_0_44px_-6px_rgba(246,199,107,0.8)] active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sol-gold px-7 py-3.5 text-sm font-semibold text-sol-night shadow-[0_0_32px_-10px_rgba(239,125,69,0.65)] transition-all duration-300 hover:bg-sol-400 hover:shadow-[0_0_44px_-8px_rgba(239,125,69,0.85)] active:scale-[0.98];
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:border-sol-mint/50 hover:bg-sol-mint/10 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:border-sol-gold/50 hover:bg-sol-gold/10 active:scale-[0.98];
   }
 
   /* Prose styles for rendered skill markdown */
@@ -244,7 +249,7 @@ body {
 }
 
 ::selection {
-  background: rgba(246, 199, 107, 0.35);
+  background: rgba(239, 125, 69, 0.32);
   color: #ffffff;
 }
 

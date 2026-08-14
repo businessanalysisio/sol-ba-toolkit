@@ -242,7 +242,7 @@ export default function RequirementsPage() {
                 <div className="space-y-2"><Label>Priority</Label><Select value={priority} onValueChange={(value) => setPriority(value as Priority)} disabled={!workspaceId}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["low", "medium", "high", "critical"].map((value) => <SelectItem key={value} value={value}>{value[0].toUpperCase() + value.slice(1)}</SelectItem>)}</SelectContent></Select></div>
               </div>
               <div className="space-y-2"><Label htmlFor="criteria">Acceptance criteria</Label><Textarea id="criteria" value={criteria} onChange={(event) => setCriteria(event.target.value)} rows={4} placeholder="One criterion per line" disabled={!workspaceId} /></div>
-              <Button className="h-11 w-full rounded-full font-semibold shadow-[0_10px_32px_-14px_rgba(246,199,107,0.85)]" type="submit" disabled={saving || !workspaceId || !title.trim()}>{saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} Add draft</Button>
+              <Button className="h-11 w-full rounded-full font-semibold shadow-[0_10px_32px_-14px_rgba(239, 125, 69,0.85)]" type="submit" disabled={saving || !workspaceId || !title.trim()}>{saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} Add draft</Button>
             </form>
           </CardContent>
         </Card>

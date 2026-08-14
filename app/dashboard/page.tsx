@@ -60,7 +60,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/brief-builder"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-sol-gold px-6 text-sm font-semibold text-sol-night shadow-[0_12px_40px_-14px_rgba(246,199,107,0.9)] transition hover:-translate-y-0.5 hover:bg-white"
+            className="inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-sol-gold px-6 text-sm font-semibold text-sol-night shadow-[0_12px_40px_-16px_rgba(239,125,69,0.9)] transition hover:-translate-y-0.5 hover:bg-sol-400"
           >
             Start a decision brief <ArrowRight className="h-4 w-4" />
           </Link>

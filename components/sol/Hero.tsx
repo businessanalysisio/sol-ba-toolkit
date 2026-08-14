@@ -37,7 +37,7 @@ function KnowledgeGraph() {
 
   return (
     <div ref={graphRef} className="relative mx-auto aspect-square w-full max-w-[520px]">
-      <div className="absolute inset-8 rounded-full border border-white/10 bg-[radial-gradient(circle_at_center,rgba(246,199,107,0.12),transparent_58%)]" />
+      <div className="absolute inset-8 rounded-full border border-white/10 bg-[radial-gradient(circle_at_center,rgba(239, 125, 69,0.12),transparent_58%)]" />
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500" aria-hidden="true">
         {[
           ["250", "100", "112", "238"],
@@ -54,7 +54,7 @@ function KnowledgeGraph() {
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke="rgba(246,199,107,.34)"
+            stroke="rgba(239, 125, 69,.34)"
             strokeWidth="1"
           />
         ))}

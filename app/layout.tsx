@@ -1,6 +1,24 @@
 import type { Metadata } from "next"
 import type React from "react"
+import { Be_Vietnam_Pro, Noto_Sans } from "next/font/google"
 import "./globals.css"
+
+// Be Vietnam Pro (display) + Noto Sans (body). Both serve the vietnamese
+// U+1E00–1EFF subset, which is the reason the design system picks them over
+// the usual geometric sans faces — Vietnamese diacritics must not fall back.
+const display = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-display",
+  display: "swap",
+})
+
+const body = Noto_Sans({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "Sol | Second Brain for Business Analysis",
@@ -21,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className={`dark scroll-smooth ${display.variable} ${body.variable}`}>
       <body>{children}</body>
     </html>
   )
