@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Lộ Trình Học"
+  short_description: "Lộ trình học BA mới với AI"
+  default_prompt: "Dùng $ba-ai-lo-trinh-hoc để lập lộ trình học BA với AI cho người mới."

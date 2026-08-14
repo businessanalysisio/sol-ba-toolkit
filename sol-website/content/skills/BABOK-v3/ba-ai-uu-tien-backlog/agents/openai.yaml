@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Ưu Tiên Danh Sách Tồn Đọng"
+  short_description: "Ưu tiên phạm vi và danh sách việc"
+  default_prompt: "Dùng $ba-ai-uu-tien-backlog để xếp hạng danh sách tồn đọng theo giá trị, rủi ro và nỗ lực."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Đánh Giá Chất Lượng"
+  short_description: "Rà soát chất lượng yêu cầu"
+  default_prompt: "Dùng $ba-ai-danh-gia-chat-luong để kiểm tra yêu cầu trước khi gửi cho nhóm triển khai."

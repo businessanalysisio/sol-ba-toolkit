@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  background: #080806;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Inter, Geist, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    linear-gradient(180deg, rgba(246, 199, 107, 0.05), transparent 34rem),
+    #080806;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 45 15% 3%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .sol-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(to bottom, black, transparent 88%);
+  }
+
+  .bg-white\/8 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ---- Utilities ported from sol-website, recolored to the gold/mint identity ---- */
+@layer components {
+  .sol-app-shell {
+    --background: 222 33% 7%;
+    --foreground: 42 30% 94%;
+    --card: 222 28% 10%;
+    --card-foreground: 42 30% 94%;
+    --popover: 222 28% 9%;
+    --popover-foreground: 42 30% 94%;
+    --primary: 40 90% 66%;
+    --primary-foreground: 222 42% 8%;
+    --secondary: 220 21% 16%;
+    --secondary-foreground: 42 30% 94%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 218 12% 65%;
+    --accent: 164 42% 18%;
+    --accent-foreground: 158 65% 78%;
+    --border: 220 19% 18%;
+    --input: 220 19% 20%;
+    --ring: 40 90% 66%;
+    --sidebar-background: 222 35% 6%;
+    --sidebar-foreground: 42 25% 90%;
+    --sidebar-primary: 40 90% 66%;
+    --sidebar-primary-foreground: 222 42% 8%;
+    --sidebar-accent: 220 22% 13%;
+    --sidebar-accent-foreground: 42 25% 94%;
+    --sidebar-border: 220 19% 15%;
+    --sidebar-ring: 40 90% 66%;
+    --radius: 0.9rem;
+    background:
+      radial-gradient(circle at 88% 0%, rgba(120, 230, 198, 0.08), transparent 28rem),
+      radial-gradient(circle at 20% -10%, rgba(246, 199, 107, 0.08), transparent 30rem),
+      hsl(var(--background));
+  }
+
+  .sol-app-canvas {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .sol-app-panel {
+    @apply border border-white/[0.07] bg-white/[0.035] shadow-[0_24px_80px_-42px_rgba(0,0,0,0.9)] backdrop-blur-sm;
+  }
+
+  .sol-app-kicker {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-sol-gold;
+  }
+
+  .glass {
+    @apply border border-white/10 bg-white/[0.045] backdrop-blur-xl;
+  }
+  .glass-hover {
+    @apply transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.07];
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-sol-gold via-sol-200 to-sol-mint bg-clip-text text-transparent;
+  }
+  .section-pad {
+    @apply px-5 py-24 sm:px-8 md:py-32;
+  }
+  .eyebrow {
+    @apply mb-4 inline-flex items-center gap-2 rounded-full border border-sol-gold/20 bg-sol-gold/10 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-sol-gold;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sol-gold px-7 py-3.5 text-sm font-semibold text-sol-night shadow-[0_0_32px_-8px_rgba(246,199,107,0.6)] transition-all duration-300 hover:bg-white hover:shadow-[0_0_44px_-6px_rgba(246,199,107,0.8)] active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:border-sol-mint/50 hover:bg-sol-mint/10 active:scale-[0.98];
+  }
+
+  /* Prose styles for rendered skill markdown */
+  .skill-prose {
+    @apply text-zinc-300;
+  }
+  .skill-prose h2 {
+    @apply mt-10 border-b border-white/10 pb-2 text-xl font-semibold text-white first:mt-0;
+  }
+  .skill-prose h3 {
+    @apply mt-7 text-lg font-semibold text-white;
+  }
+  .skill-prose p {
+    @apply mt-4 leading-relaxed;
+  }
+  .skill-prose ul,
+  .skill-prose ol {
+    @apply mt-4 space-y-2 pl-5;
+  }
+  .skill-prose ul {
+    @apply list-disc marker:text-sol-gold;
+  }
+  .skill-prose ol {
+    @apply list-decimal marker:text-sol-gold;
+  }
+  .skill-prose li {
+    @apply leading-relaxed;
+  }
+  .skill-prose a {
+    @apply text-sol-gold underline decoration-sol-gold/40 underline-offset-2 hover:text-sol-200;
+  }
+  .skill-prose strong {
+    @apply font-semibold text-white;
+  }
+  .skill-prose code {
+    @apply rounded bg-white/10 px-1.5 py-0.5 text-[0.9em] text-sol-200;
+  }
+  .skill-prose blockquote {
+    @apply mt-4 border-l-2 border-sol-gold/50 pl-4 italic text-zinc-400;
+  }
+}
+
+@layer utilities {
+  .bg-grid {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+}
+
+::selection {
+  background: rgba(246, 199, 107, 0.35);
+  color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

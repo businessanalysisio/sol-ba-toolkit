@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Hiểu Bối Cảnh"
+  short_description: "Tóm tắt bối cảnh nghiệp vụ"
+  default_prompt: "Dùng $ba-ai-hieu-boi-canh để biến tài liệu thô thành bức tranh bối cảnh nghiệp vụ."

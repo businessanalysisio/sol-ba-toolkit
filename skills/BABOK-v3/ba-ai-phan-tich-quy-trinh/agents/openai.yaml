@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Phân Tích Quy Trình"
+  short_description: "Phân tích quy trình nghiệp vụ"
+  default_prompt: "Dùng $ba-ai-phan-tich-quy-trinh để phân tích quy trình hiện tại và đề xuất cải tiến."

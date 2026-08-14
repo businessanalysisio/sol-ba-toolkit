@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Khởi Động"
+  short_description: "Khởi động công việc BA với AI"
+  default_prompt: "Dùng $ba-ai-khoi-dong để lập kế hoạch bắt đầu một nhiệm vụ BA với AI."

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sol-website",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/hoang/Documents/Claude/Projects/basecamp personal agent/sol/sol-website",
+      "port": 4510
+    }
+  ]
+}

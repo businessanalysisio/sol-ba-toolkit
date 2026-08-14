@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Viết Yêu Cầu"
+  short_description: "Viết câu chuyện người dùng"
+  default_prompt: "Dùng $ba-ai-viet-yeu-cau để chuyển ghi chú thành yêu cầu rõ ràng và kiểm thử được."

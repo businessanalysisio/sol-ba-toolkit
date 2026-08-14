@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Giao Tiếp Stakeholder"
+  short_description: "Soạn thông điệp cho bên liên quan"
+  default_prompt: "Dùng $ba-ai-giao-tiep-stakeholder để soạn cập nhật, câu hỏi và biên bản cho bên liên quan."

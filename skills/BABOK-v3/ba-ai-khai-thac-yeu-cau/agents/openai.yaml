@@ -1,0 +1,4 @@
+interface:
+  display_name: "BA AI Khai Thác Yêu Cầu"
+  short_description: "Chuẩn bị phỏng vấn và hội thảo"
+  default_prompt: "Dùng $ba-ai-khai-thac-yeu-cau để chuẩn bị phiên khai thác yêu cầu với bên liên quan."
