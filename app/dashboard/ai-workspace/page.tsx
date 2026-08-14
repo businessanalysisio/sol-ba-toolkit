@@ -199,7 +199,7 @@ export default function AIWorkspacePage() {
           const detail = await response.text()
           setError(
             response.status === 503
-              ? "AI is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local and restart the dev server."
+              ? "AI is not configured. Sign in with `claude` to use your Claude subscription, or add GOOGLE_GENERATIVE_AI_API_KEY to .env.local, then restart the server."
               : detail || `Request failed with status ${response.status}`,
           )
           return
@@ -226,7 +226,7 @@ export default function AIWorkspacePage() {
         // response headers were sent — surface it instead of showing an empty panel.
         if (!received.trim()) {
           setError(
-            "The model returned nothing. This usually means the API key is invalid or the configured model is unavailable for your project. Check the server logs and GOOGLE_GENERATIVE_AI_API_KEY.",
+            "The model returned nothing. Check the server logs — usually the Claude sign-in has expired, or the configured Gemini key or model is unavailable.",
           )
         }
       } catch (err) {
@@ -313,233 +313,248 @@ export default function AIWorkspacePage() {
         })}
       </div>
 
-      {/* Tool Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Wand2 className="h-5 w-5" />
-            {selectedTool === "requirements" && "Requirements Generator"}
-            {selectedTool === "advisor" && "BA Method Advisor"}
-            {selectedTool === "templates" && "Analysis Templates"}
-            {selectedTool === "copilot" && "AI Copilot"}
-          </CardTitle>
-          {activeTool ? <CardDescription>{activeTool.description}</CardDescription> : null}
-        </CardHeader>
-        <CardContent>
-          {selectedTool === "requirements" && (
-            <Tabs value={requirementTab} onValueChange={setRequirementTab}>
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-                {requirementTemplates.map((template) => (
-                  <TabsTrigger key={template.id} value={template.id}>
-                    {template.title}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {requirementTemplates.map((template) => {
-                const value = requirementInputs[template.id] ?? ""
-                return (
-                  <TabsContent key={template.id} value={template.id} className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold mb-2">{template.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
-                    </div>
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor={`req-input-${template.id}`}>Describe what you need:</Label>
-                        <Textarea
-                          id={`req-input-${template.id}`}
-                          placeholder={template.placeholder}
-                          className="mt-2 min-h-[120px]"
-                          value={value}
-                          onChange={(event) =>
-                            setRequirementInputs((prev) => ({ ...prev, [template.id]: event.target.value }))
-                          }
-                        />
-                        <p className="mt-2 text-xs text-muted-foreground">
-                          The more context you give — actors, constraints, what is out of scope — the more specific the
-                          output.
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() =>
-                          generate({ kind: "requirement", template: template.title, input: value })
-                        }
-                        disabled={isGenerating || !value.trim()}
-                        className="w-full"
-                      >
-                        {isGenerating ? (
-                          <>
-                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                            Generating...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-4 w-4 mr-2" />
-                            Generate {template.title}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </TabsContent>
-                )
-              })}
-            </Tabs>
-          )}
-
-          {selectedTool === "templates" && (
-            <Tabs value={analysisTab} onValueChange={setAnalysisTab}>
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-                {analysisTemplates.map((template) => (
-                  <TabsTrigger key={template.id} value={template.id}>
-                    {template.title}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {analysisTemplates.map((template) => {
-                const fieldValues = template.fields.map(
-                  (field) => analysisInputs[`${template.id}:${field}`] ?? "",
-                )
-                const hasInput = fieldValues.some((v) => v.trim())
-
-                return (
-                  <TabsContent key={template.id} value={template.id} className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold mb-2">{template.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
-                    </div>
-                    <div className="space-y-4">
-                      {template.fields.map((field) => {
-                        const key = `${template.id}:${field}`
-                        return (
-                          <div key={key}>
-                            <Label htmlFor={key}>{field}:</Label>
-                            <Input
-                              id={key}
-                              placeholder={`Enter ${field.toLowerCase()}...`}
-                              className="mt-2"
-                              value={analysisInputs[key] ?? ""}
-                              onChange={(event) =>
-                                setAnalysisInputs((prev) => ({ ...prev, [key]: event.target.value }))
-                              }
-                            />
-                          </div>
-                        )
-                      })}
-                      <Button
-                        onClick={() =>
-                          generate({
-                            kind: "analysis",
-                            template: template.title,
-                            fields: Object.fromEntries(
-                              template.fields.map((field) => [
-                                field,
-                                analysisInputs[`${template.id}:${field}`] ?? "",
-                              ]),
-                            ),
-                          })
-                        }
-                        disabled={isGenerating || !hasInput}
-                        className="w-full"
-                      >
-                        {isGenerating ? (
-                          <>
-                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                            Generating...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-4 w-4 mr-2" />
-                            Generate {template.title}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </TabsContent>
-                )
-              })}
-            </Tabs>
-          )}
-
-          {selectedTool === "advisor" && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {advisorPrompts.map((item) => (
-                  <Card key={item.title}>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{item.title}</CardTitle>
-                      <CardDescription>{item.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm mb-4">{item.blurb}</p>
-                      <Button
-                        variant="outline"
-                        className="w-full bg-transparent"
-                        disabled={isGenerating}
-                        onClick={() => {
-                          setAdvisorInput(item.prompt)
-                          generate({ kind: "advisor", template: item.title, input: item.prompt })
-                        }}
-                      >
-                        {item.cta}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Ask the BA Advisor</CardTitle>
-                  <CardDescription>Get personalized guidance on BA methodologies</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Textarea
-                    placeholder="Ask about BA techniques, methodologies, or best practices..."
-                    className="min-h-[100px]"
-                    value={advisorInput}
-                    onChange={(event) => setAdvisorInput(event.target.value)}
-                  />
-                  <Button
-                    className="w-full"
-                    disabled={isGenerating || !advisorInput.trim()}
-                    onClick={() =>
-                      generate({ kind: "advisor", template: "BA Method Advisor", input: advisorInput })
-                    }
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,440px)_1fr] lg:items-start">
+        {/* Form column */}
+          <Card className="rounded-2xl border-white/[0.09] bg-white/[0.02]">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Wand2 className="h-5 w-5" />
+              {selectedTool === "requirements" && "Requirements Generator"}
+              {selectedTool === "advisor" && "BA Method Advisor"}
+              {selectedTool === "templates" && "Analysis Templates"}
+              {selectedTool === "copilot" && "AI Copilot"}
+            </CardTitle>
+            {activeTool ? <CardDescription>{activeTool.description}</CardDescription> : null}
+          </CardHeader>
+          <CardContent>
+            {selectedTool === "requirements" && (
+              <Tabs value={requirementTab} onValueChange={setRequirementTab}>
+                <TabsList className="flex h-auto w-full flex-wrap justify-start gap-2 bg-transparent p-0">
+                  {requirementTemplates.map((template) => (
+                    <TabsTrigger
+                    key={template.id}
+                    value={template.id}
+                    className="rounded-full border border-white/[0.14] px-3.5 py-1.5 text-sm text-muted-foreground data-[state=active]:border-sol-gold/50 data-[state=active]:bg-sol-gold/10 data-[state=active]:text-sol-gold data-[state=active]:shadow-none"
                   >
-                    {isGenerating ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Thinking...
-                      </>
-                    ) : (
-                      <>
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Get Advice
-                      </>
-                    )}
+                      {template.title}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {requirementTemplates.map((template) => {
+                  const value = requirementInputs[template.id] ?? ""
+                  return (
+                    <TabsContent key={template.id} value={template.id} className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold mb-2">{template.title}</h3>
+                        <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor={`req-input-${template.id}`}>Describe what you need:</Label>
+                          <Textarea
+                            id={`req-input-${template.id}`}
+                            placeholder={template.placeholder}
+                            className="mt-2 min-h-[120px]"
+                            value={value}
+                            onChange={(event) =>
+                              setRequirementInputs((prev) => ({ ...prev, [template.id]: event.target.value }))
+                            }
+                          />
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            The more context you give — actors, constraints, what is out of scope — the more specific the
+                            output.
+                          </p>
+                        </div>
+                        <Button
+                          onClick={() =>
+                            generate({ kind: "requirement", template: template.title, input: value })
+                          }
+                          disabled={isGenerating || !value.trim()}
+                          className="w-full"
+                        >
+                          {isGenerating ? (
+                            <>
+                              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="h-4 w-4 mr-2" />
+                              Generate {template.title}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </TabsContent>
+                  )
+                })}
+              </Tabs>
+            )}
+
+            {selectedTool === "templates" && (
+              <Tabs value={analysisTab} onValueChange={setAnalysisTab}>
+                <TabsList className="flex h-auto w-full flex-wrap justify-start gap-2 bg-transparent p-0">
+                  {analysisTemplates.map((template) => (
+                    <TabsTrigger
+                    key={template.id}
+                    value={template.id}
+                    className="rounded-full border border-white/[0.14] px-3.5 py-1.5 text-sm text-muted-foreground data-[state=active]:border-sol-gold/50 data-[state=active]:bg-sol-gold/10 data-[state=active]:text-sol-gold data-[state=active]:shadow-none"
+                  >
+                      {template.title}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {analysisTemplates.map((template) => {
+                  const fieldValues = template.fields.map(
+                    (field) => analysisInputs[`${template.id}:${field}`] ?? "",
+                  )
+                  const hasInput = fieldValues.some((v) => v.trim())
+
+                  return (
+                    <TabsContent key={template.id} value={template.id} className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold mb-2">{template.title}</h3>
+                        <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
+                      </div>
+                      <div className="space-y-4">
+                        {template.fields.map((field) => {
+                          const key = `${template.id}:${field}`
+                          return (
+                            <div key={key}>
+                              <Label htmlFor={key}>{field}:</Label>
+                              <Input
+                                id={key}
+                                placeholder={`Enter ${field.toLowerCase()}...`}
+                                className="mt-2"
+                                value={analysisInputs[key] ?? ""}
+                                onChange={(event) =>
+                                  setAnalysisInputs((prev) => ({ ...prev, [key]: event.target.value }))
+                                }
+                              />
+                            </div>
+                          )
+                        })}
+                        <Button
+                          onClick={() =>
+                            generate({
+                              kind: "analysis",
+                              template: template.title,
+                              fields: Object.fromEntries(
+                                template.fields.map((field) => [
+                                  field,
+                                  analysisInputs[`${template.id}:${field}`] ?? "",
+                                ]),
+                              ),
+                            })
+                          }
+                          disabled={isGenerating || !hasInput}
+                          className="w-full"
+                        >
+                          {isGenerating ? (
+                            <>
+                              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="h-4 w-4 mr-2" />
+                              Generate {template.title}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </TabsContent>
+                  )
+                })}
+              </Tabs>
+            )}
+
+            {selectedTool === "advisor" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {advisorPrompts.map((item) => (
+                    <Card key={item.title}>
+                      <CardHeader>
+                        <CardTitle className="text-lg">{item.title}</CardTitle>
+                        <CardDescription>{item.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm mb-4">{item.blurb}</p>
+                        <Button
+                          variant="outline"
+                          className="w-full bg-transparent"
+                          disabled={isGenerating}
+                          onClick={() => {
+                            setAdvisorInput(item.prompt)
+                            generate({ kind: "advisor", template: item.title, input: item.prompt })
+                          }}
+                        >
+                          {item.cta}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Ask the BA Advisor</CardTitle>
+                    <CardDescription>Get personalized guidance on BA methodologies</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Textarea
+                      placeholder="Ask about BA techniques, methodologies, or best practices..."
+                      className="min-h-[100px]"
+                      value={advisorInput}
+                      onChange={(event) => setAdvisorInput(event.target.value)}
+                    />
+                    <Button
+                      className="w-full"
+                      disabled={isGenerating || !advisorInput.trim()}
+                      onClick={() =>
+                        generate({ kind: "advisor", template: "BA Method Advisor", input: advisorInput })
+                      }
+                    >
+                      {isGenerating ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Thinking...
+                        </>
+                      ) : (
+                        <>
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Get Advice
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {selectedTool === "copilot" && (
+              <div className="text-center py-8">
+                <Bot className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">AI Copilot</h3>
+                <p className="text-muted-foreground mb-4">
+                  Your intelligent assistant for business analysis tasks and queries.
+                </p>
+                <Link href="/dashboard/ai-assistant">
+                  <Button>
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Open AI Copilot
                   </Button>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+                </Link>
+              </div>
+            )}
 
-          {selectedTool === "copilot" && (
-            <div className="text-center py-8">
-              <Bot className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">AI Copilot</h3>
-              <p className="text-muted-foreground mb-4">
-                Your intelligent assistant for business analysis tasks and queries.
-              </p>
-              <Link href="/dashboard/ai-assistant">
-                <Button>
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Open AI Copilot
-                </Button>
-              </Link>
-            </div>
-          )}
 
-          {/* Error */}
+        </CardContent>
+      </Card>
+
+        {/* Evidence column — what the model produced, and what it drew on */}
+        <section className="space-y-4" aria-live="polite">
+
           {error && (
             <div
               role="alert"
@@ -555,7 +570,7 @@ export default function AIWorkspacePage() {
 
           {/* Generated Content */}
           {(generatedContent || isGenerating) && (
-            <Card className="mt-6">
+            <Card className="rounded-2xl border-white/[0.09] bg-white/[0.02]">
               <CardHeader>
                 <CardTitle className="flex flex-wrap items-center justify-between gap-3">
                   <span className="flex items-center gap-2">
@@ -594,8 +609,18 @@ export default function AIWorkspacePage() {
               </CardContent>
             </Card>
           )}
-        </CardContent>
-      </Card>
+
+          {!error && !generatedContent && !isGenerating && (
+            <div className="rounded-2xl border border-dashed border-white/[0.12] p-8 text-center">
+              <p className="font-medium text-white">Nothing generated yet</p>
+              <p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-muted-foreground">
+                Fill in the context on the left and run it. The result appears here with the
+                template it came from, ready to copy or export.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   )
 }
