@@ -144,6 +144,13 @@ const advisorPrompts = [
   },
 ]
 
+type GenerateBody = {
+  kind: "requirement" | "analysis" | "advisor"
+  template: string
+  input?: string
+  fields?: Record<string, string>
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -168,6 +175,9 @@ export default function AIWorkspacePage() {
   const [copied, setCopied] = useState(false)
 
   const abortRef = useRef<AbortController | null>(null)
+  // Kept so a failed run can be retried in place — the reference's failure
+  // panel offers "Run again", which needs the body that failed.
+  const [lastRequest, setLastRequest] = useState<GenerateBody | null>(null)
 
   const stop = useCallback(() => {
     abortRef.current?.abort()
@@ -176,12 +186,13 @@ export default function AIWorkspacePage() {
   }, [])
 
   const generate = useCallback(
-    async (body: { kind: "requirement" | "analysis" | "advisor"; template: string; input?: string; fields?: Record<string, string> }) => {
+    async (body: GenerateBody) => {
       abortRef.current?.abort()
       const controller = new AbortController()
       abortRef.current = controller
 
       setIsGenerating(true)
+      setLastRequest(body)
       setError(null)
       setGeneratedContent("")
       setGeneratedTitle(body.template)
@@ -239,6 +250,16 @@ export default function AIWorkspacePage() {
     },
     [],
   )
+
+  const retry = useCallback(() => {
+    if (lastRequest) void generate(lastRequest)
+  }, [generate, lastRequest])
+
+  const clearResult = useCallback(() => {
+    setError(null)
+    setGeneratedContent("")
+    setGeneratedTitle("")
+  }, [])
 
   const handleCopy = useCallback(async () => {
     try {
@@ -556,14 +577,20 @@ export default function AIWorkspacePage() {
         <section className="space-y-4" aria-live="polite">
 
           {error && (
-            <div
-              role="alert"
-              className="mt-6 flex items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4"
-            >
-              <CircleAlert className="h-5 w-5 shrink-0 text-destructive" />
-              <div>
-                <p className="font-medium text-destructive">Generation failed</p>
-                <p className="mt-1 text-sm text-muted-foreground">{error}</p>
+            <div role="alert" className="rounded-2xl border border-sol-coral/45 bg-sol-coral/[0.06] p-5">
+              <p className="flex items-center gap-2 font-semibold text-sol-coral">
+                <CircleAlert className="h-4 w-4 shrink-0" />
+                Generation failed
+              </p>
+              <p className="mt-2 max-w-prose text-sm leading-6 text-muted-foreground">{error}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button size="sm" onClick={retry} disabled={!lastRequest || isGenerating}>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Run again
+                </Button>
+                <Button size="sm" variant="outline" onClick={clearResult}>
+                  Clear
+                </Button>
               </div>
             </div>
           )}
@@ -597,6 +624,11 @@ export default function AIWorkspacePage() {
                       <Download className="h-4 w-4 mr-2" />
                       Export
                     </Button>
+                    {!isGenerating ? (
+                      <Button variant="ghost" size="sm" onClick={clearResult}>
+                        Clear
+                      </Button>
+                    ) : null}
                   </div>
                 </CardTitle>
               </CardHeader>
