@@ -84,7 +84,9 @@ function AppSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
             const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`))
             return (
               <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
+                {/* h-auto overrides the primitive's fixed h-8: these items are two
+                    lines, and a 32px box clipped the description into the row below. */}
+                <SidebarMenuButton asChild isActive={isActive} tooltip={item.title} className="h-auto">
                   <Link href={item.href} className="flex items-center gap-3 rounded-xl px-3 py-2.5">
                     <Icon className="h-4 w-4" />
                     <span className="min-w-0 flex-1">
