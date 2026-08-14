@@ -43,6 +43,7 @@ const navigationItems = [
   },
   { title: "Requirements", href: "/dashboard/requirements", description: "Capture and review requirements", dot: "bg-sol-warn" },
   { title: "Traceability", href: "/dashboard/traceability", description: "Goals, coverage, and gaps", dot: "bg-sol-mint" },
+  { title: "Sources", href: "/dashboard/sources", description: "Ask the corpus, with citations", dot: "bg-sol-info" },
   { title: "Decision briefs", href: "/brief-builder", description: "Structure a recommendation", dot: "bg-sol-gold" },
   { title: "Daily workflow", href: "/dashboard/daily-workflow", description: "Priorities and meetings", dot: "bg-sol-info" },
   { title: "Learning paths", href: "/paths", description: "Build BA capability", dot: "bg-sol-mint", count: learningPaths.length },

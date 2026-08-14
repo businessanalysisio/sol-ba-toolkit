@@ -15,7 +15,7 @@
     "start": "next start",
     "infra:up": "docker-compose -f infra/docker-compose.yml up -d",
     "infra:down": "docker-compose -f infra/docker-compose.yml down",
-    "ingest:wiki": "tsx scripts/ingest-wiki.ts"
+    "ingest": "tsx scripts/ingest.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.10",
