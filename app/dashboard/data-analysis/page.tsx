@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Eyebrow } from "@/components/sol/status"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -654,16 +655,17 @@ export default function DataAnalysisPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
+    <div className="mx-auto max-w-[1380px] space-y-7 p-5 md:p-9 lg:p-12">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Database className="h-8 w-8 text-blue-600" />
-            Database Schema Reference
+          <Eyebrow>Evidence analysis</Eyebrow>
+          <h1 className="mt-3 max-w-3xl text-balance text-3xl font-semibold tracking-[-0.03em] text-white md:text-4xl">
+            What the data says about how decisions get made.
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Comprehensive database schema for business analysis and data insights
+          <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+            The schema behind the workspace — tables, relationships, and the questions each one
+            can answer.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -681,9 +683,11 @@ export default function DataAnalysisPage() {
       {/* Search and Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="flex flex-col gap-4 md:flex-row md:items-start">
+            {/* Fixed basis, not flex-1: the wrapping filter group has no shrink
+                limit, so a shrinkable search collapses to zero beside it. */}
+            <div className="relative w-full shrink-0 md:w-72">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search tables, columns, or descriptions..."
                 value={searchTerm}
@@ -691,8 +695,8 @@ export default function DataAnalysisPage() {
                 className="pl-10"
               />
             </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-1 items-start gap-2">
+              <Filter className="mt-2.5 h-4 w-4 shrink-0 text-muted-foreground" />
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <Button
@@ -729,7 +733,7 @@ export default function DataAnalysisPage() {
                     <div
                       key={table.name}
                       className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                        selectedTable?.name === table.name ? "bg-blue-50 border-blue-200" : "hover:bg-muted/50"
+                        selectedTable?.name === table.name ? "bg-sol-info/10 border-sol-info/30" : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedTable(table)}
                     >
@@ -779,7 +783,7 @@ export default function DataAnalysisPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="p-3 bg-blue-50 rounded-lg">
+                      <div className="p-3 bg-sol-info/[0.08] rounded-lg">
                         <h4 className="font-semibold text-sm mb-1">Business Context</h4>
                         <p className="text-sm text-muted-foreground">{selectedTable.businessContext}</p>
                       </div>
@@ -816,7 +820,7 @@ export default function DataAnalysisPage() {
                               </div>
                               <p className="text-sm text-muted-foreground">{column.description}</p>
                               {column.foreignKey && (
-                                <p className="text-xs text-blue-600 mt-1">References: {column.foreignKey}</p>
+                                <p className="text-xs text-sol-info mt-1">References: {column.foreignKey}</p>
                               )}
                             </div>
                           ))}
@@ -843,10 +847,10 @@ export default function DataAnalysisPage() {
                           .filter((col) => col.foreignKey)
                           .map((column) => (
                             <div key={column.name} className="flex items-center gap-3 p-2 bg-muted/50 rounded">
-                              <Link className="h-4 w-4 text-blue-600" />
+                              <Link className="h-4 w-4 text-sol-info" />
                               <span className="font-mono text-sm">{column.name}</span>
                               <span className="text-muted-foreground">→</span>
-                              <span className="font-mono text-sm text-blue-600">{column.foreignKey}</span>
+                              <span className="font-mono text-sm text-sol-info">{column.foreignKey}</span>
                             </div>
                           ))}
                         {selectedTable.columns.filter((col) => col.foreignKey).length === 0 && (
@@ -861,9 +865,9 @@ export default function DataAnalysisPage() {
                       <h4 className="font-semibold mb-3">Referenced By</h4>
                       <div className="space-y-2">
                         {selectedTable.relationships.map((relationship) => (
-                          <div key={relationship} className="flex items-center gap-3 p-2 bg-green-50 rounded">
-                            <Link className="h-4 w-4 text-green-600" />
-                            <span className="font-mono text-sm text-green-600">{relationship}</span>
+                          <div key={relationship} className="flex items-center gap-3 p-2 bg-sol-mint/[0.08] rounded">
+                            <Link className="h-4 w-4 text-sol-mint" />
+                            <span className="font-mono text-sm text-sol-mint">{relationship}</span>
                             <span className="text-muted-foreground">references this table</span>
                           </div>
                         ))}
@@ -879,8 +883,8 @@ export default function DataAnalysisPage() {
                       <h4 className="font-semibold mb-3">Indexes</h4>
                       <div className="grid grid-cols-2 gap-2">
                         {selectedTable.indexes.map((index) => (
-                          <div key={index} className="flex items-center gap-2 p-2 bg-yellow-50 rounded">
-                            <BarChart3 className="h-4 w-4 text-yellow-600" />
+                          <div key={index} className="flex items-center gap-2 p-2 bg-sol-warn/[0.08] rounded">
+                            <BarChart3 className="h-4 w-4 text-sol-warn" />
                             <span className="font-mono text-sm">{index}</span>
                           </div>
                         ))}
@@ -950,11 +954,11 @@ export default function DataAnalysisPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {selectedTable.name === "requirements" && (
                           <>
-                            <div className="p-3 bg-blue-50 rounded-lg">
+                            <div className="p-3 bg-sol-info/[0.08] rounded-lg">
                               <h5 className="font-medium text-sm">Requirements Velocity</h5>
                               <p className="text-xs text-muted-foreground">Track requirements submitted over time</p>
                             </div>
-                            <div className="p-3 bg-green-50 rounded-lg">
+                            <div className="p-3 bg-sol-mint/[0.08] rounded-lg">
                               <h5 className="font-medium text-sm">Sentiment Analysis</h5>
                               <p className="text-xs text-muted-foreground">Monitor sentiment trends in requirements</p>
                             </div>
@@ -962,7 +966,7 @@ export default function DataAnalysisPage() {
                         )}
                         {selectedTable.name === "projects" && (
                           <>
-                            <div className="p-3 bg-purple-50 rounded-lg">
+                            <div className="p-3 bg-sol-violet/[0.08] rounded-lg">
                               <h5 className="font-medium text-sm">Project Health</h5>
                               <p className="text-xs text-muted-foreground">Track project health status distribution</p>
                             </div>
@@ -1019,7 +1023,7 @@ export default function DataAnalysisPage() {
                       <h4 className="font-semibold mb-3">Business Intelligence</h4>
                       <div className="grid grid-cols-1 gap-3">
                         <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                          <Target className="h-5 w-5 text-blue-600 mt-0.5" />
+                          <Target className="h-5 w-5 text-sol-info mt-0.5" />
                           <div>
                             <h5 className="font-medium text-sm">KPI Dashboards</h5>
                             <p className="text-xs text-muted-foreground">
@@ -1028,7 +1032,7 @@ export default function DataAnalysisPage() {
                           </div>
                         </div>
                         <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                          <Users className="h-5 w-5 text-green-600 mt-0.5" />
+                          <Users className="h-5 w-5 text-sol-mint mt-0.5" />
                           <div>
                             <h5 className="font-medium text-sm">Stakeholder Analytics</h5>
                             <p className="text-xs text-muted-foreground">
@@ -1037,7 +1041,7 @@ export default function DataAnalysisPage() {
                           </div>
                         </div>
                         <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                          <BarChart3 className="h-5 w-5 text-purple-600 mt-0.5" />
+                          <BarChart3 className="h-5 w-5 text-sol-violet mt-0.5" />
                           <div>
                             <h5 className="font-medium text-sm">Process Optimization</h5>
                             <p className="text-xs text-muted-foreground">
@@ -1071,7 +1075,7 @@ export default function DataAnalysisPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <TableIcon className="h-8 w-8 text-blue-600" />
+              <TableIcon className="h-8 w-8 text-sol-info" />
               <div>
                 <p className="text-2xl font-bold">{databaseSchema.length}</p>
                 <p className="text-sm text-muted-foreground">Total Tables</p>
@@ -1082,7 +1086,7 @@ export default function DataAnalysisPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <FileText className="h-8 w-8 text-green-600" />
+              <FileText className="h-8 w-8 text-sol-mint" />
               <div>
                 <p className="text-2xl font-bold">
                   {databaseSchema.reduce((sum, table) => sum + table.columns.length, 0)}
@@ -1095,7 +1099,7 @@ export default function DataAnalysisPage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Link className="h-8 w-8 text-purple-600" />
+              <Link className="h-8 w-8 text-sol-violet" />
               <div>
                 <p className="text-2xl font-bold">
                   {databaseSchema.reduce((sum, table) => sum + table.relationships.length, 0)}
