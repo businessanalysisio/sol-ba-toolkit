@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Eyebrow, LetterTile } from "@/components/sol/status"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -31,30 +32,38 @@ const aiTools = [
   {
     id: "copilot" as const,
     title: "AI Copilot",
-    description: "Chat-style assistant for live queries and task automation",
+    description: "Ask BA questions in context of the workspace",
     icon: MessageSquare,
     href: "/dashboard/ai-assistant",
+    letter: "C",
+    tone: "gold" as const,
   },
   {
     id: "requirements" as const,
     title: "Generate Requirements",
-    description: "Use prompts to draft user stories, epics, and specifications",
+    description: "Draft functional requirements from a business context",
     icon: FileText,
     href: "#requirements",
+    letter: "G",
+    tone: "info" as const,
   },
   {
     id: "advisor" as const,
     title: "BA Method Advisor",
-    description: "Learn and apply methodologies like BABOK, Agile, etc.",
+    description: "Recommend the elicitation or analysis method to use next",
     icon: BookOpen,
     href: "#advisor",
+    letter: "M",
+    tone: "mint" as const,
   },
   {
     id: "templates" as const,
     title: "Analysis Templates",
-    description: "Auto-generate SWOT, PESTLE, impact analysis, etc.",
+    description: "Start from user story, SWOT, PESTLE, or impact analysis",
     icon: Target,
     href: "#templates",
+    letter: "T",
+    tone: "violet" as const,
   },
 ]
 
@@ -256,65 +265,50 @@ export default function AIWorkspacePage() {
   const activeTool = aiTools.find((tool) => tool.id === selectedTool)
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Bot className="h-6 w-6 text-blue-600" />
-            <h1 className="text-3xl font-bold">AI Workspace</h1>
-            <Badge variant="secondary" className="ml-2">
-              <Sparkles className="h-3 w-3 mr-1" />
-              Powered by Gemini
-            </Badge>
-          </div>
-          <p className="text-muted-foreground">
-            Leverage AI to accelerate your business analysis work with intelligent automation and guidance.
-          </p>
-        </div>
-      </div>
+    <div className="mx-auto max-w-[1380px] space-y-7 p-5 md:p-9 lg:p-12">
+      <header>
+        <Eyebrow>AI workspace</Eyebrow>
+        <h1 className="mt-3 max-w-3xl text-balance text-3xl font-semibold tracking-[-0.03em] text-white md:text-4xl">
+          Evidence first. Every answer carries its source.
+        </h1>
+        <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+          Generate requirements, choose a method, or ask the copilot — each answer names the
+          context it was drawn from.
+        </p>
+      </header>
 
       {/* AI Tools Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {aiTools.map((tool) => {
-          const Icon = tool.icon
           const isSelected = selectedTool === tool.id
           const isLink = tool.href.startsWith("/")
+          const body = (
+            <>
+              <LetterTile letter={tool.letter} tone={tool.tone} />
+              <h2 className="mt-4 font-semibold text-white">{tool.title}</h2>
+              <p className="mt-1.5 text-sm leading-5 text-muted-foreground">{tool.description}</p>
+            </>
+          )
+          const shell = `rounded-2xl border p-5 text-left transition ${
+            isSelected && !isLink
+              ? "border-sol-gold/45 bg-sol-gold/[0.06]"
+              : "border-white/[0.09] bg-white/[0.02] hover:border-white/[0.16] hover:bg-white/[0.04]"
+          }`
 
-          return (
-            <Card
+          return isLink ? (
+            <Link key={tool.id} href={tool.href} className={`${shell} block`}>
+              {body}
+            </Link>
+          ) : (
+            <button
               key={tool.id}
-              className={`transition-all hover:shadow-md ${isSelected && !isLink ? "ring-2 ring-blue-500" : ""}`}
+              type="button"
+              onClick={() => setSelectedTool(tool.id)}
+              aria-pressed={isSelected}
+              className={`${shell} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sol-gold`}
             >
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Icon className="h-5 w-5 text-blue-600" />
-                  <Badge variant="outline" className="text-xs">
-                    {isLink ? "chat" : "generator"}
-                  </Badge>
-                </div>
-                <CardTitle className="text-base">{tool.title}</CardTitle>
-                <CardDescription className="text-sm">{tool.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                {isLink ? (
-                  <Link href={tool.href}>
-                    <Button variant="outline" size="sm" className="w-full bg-transparent">
-                      Open Tool
-                    </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    variant={isSelected ? "default" : "outline"}
-                    size="sm"
-                    className="w-full"
-                    onClick={() => setSelectedTool(tool.id)}
-                  >
-                    {isSelected ? "Selected" : "Select"}
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
+              {body}
+            </button>
           )
         })}
       </div>

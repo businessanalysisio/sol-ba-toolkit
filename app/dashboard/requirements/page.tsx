@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { AlertCircle, CheckCircle2, FileText, Loader2, Plus, ShieldCheck } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import { StatusText, type StatusTone } from "@/components/sol/status"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -45,6 +46,24 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const body = await response.json().catch(() => ({}))
   if (!response.ok) throw new Error(body.error ?? "Request failed")
   return body as T
+}
+
+// Priority and workflow state map onto the shared status vocabulary rather
+// than each page inventing its own colours.
+const PRIORITY_TONE: Record<string, StatusTone> = {
+  critical: "critical",
+  high: "caution",
+  medium: "active",
+  low: "neutral",
+}
+
+const STATUS_TONE: Record<string, StatusTone> = {
+  approved: "positive",
+  review: "active",
+  "in-review": "active",
+  draft: "neutral",
+  rejected: "critical",
+  conflict: "critical",
 }
 
 const kindLabels: Record<RequirementKind, string> = {
@@ -256,9 +275,24 @@ export default function RequirementsPage() {
             {loading ? <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Loading requirements…</div> : requirements.length ? (
               <div className="space-y-3">{requirements.map((requirement) => (
                 <article key={requirement.id} className="rounded-xl border border-white/[0.07] bg-black/10 p-5 transition hover:border-white/15 hover:bg-white/[0.025]">
-                  <div className="flex flex-wrap items-start justify-between gap-3"><div><div className="flex flex-wrap gap-2"><Badge variant="outline">{kindLabels[requirement.kind]}</Badge><Badge variant="secondary">{requirement.priority}</Badge></div><h2 className="mt-3 font-semibold">{requirement.title}</h2></div><span className="flex items-center gap-1 text-xs text-muted-foreground"><CheckCircle2 className="h-3.5 w-3.5" /> {requirement.status}</span></div>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h2 className="font-semibold text-white">{requirement.title}</h2>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {kindLabels[requirement.kind]} · v{requirement.version}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-5">
+                      <StatusText tone={PRIORITY_TONE[requirement.priority] ?? "neutral"}>
+                        {requirement.priority[0].toUpperCase() + requirement.priority.slice(1)}
+                      </StatusText>
+                      <StatusText tone={STATUS_TONE[requirement.status] ?? "neutral"}>
+                        {requirement.status[0].toUpperCase() + requirement.status.slice(1)}
+                      </StatusText>
+                    </div>
+                  </div>
                   {requirement.description && <p className="mt-3 text-sm leading-6 text-muted-foreground">{requirement.description}</p>}
-                  {requirement.acceptance_criteria.length > 0 && <ul className="mt-3 space-y-1 text-sm">{requirement.acceptance_criteria.map((item, index) => <li key={index} className="flex gap-2"><span className="text-emerald-600">✓</span>{item}</li>)}</ul>}
+                  {requirement.acceptance_criteria.length > 0 && <ul className="mt-3 space-y-1 text-sm text-muted-foreground">{requirement.acceptance_criteria.map((item, index) => <li key={index} className="flex gap-2"><span className="text-sol-mint">✓</span>{item}</li>)}</ul>}
                 </article>
               ))}</div>
             ) : <div className="grid place-items-center rounded-lg border border-dashed py-12 text-center"><FileText className="h-8 w-8 text-muted-foreground" /><p className="mt-3 font-medium">No requirements yet</p><p className="mt-1 text-sm text-muted-foreground">Capture the first draft to begin the traceable workflow.</p></div>}

@@ -10,7 +10,8 @@ import {
   Library,
   Sparkles,
 } from "lucide-react"
-import { learningPaths, userProgress } from "@/lib/mock-data"
+import { frameworks, learningPaths, userProgress } from "@/lib/mock-data"
+import { getAllSkills } from "@/lib/skills"
 
 const workActions = [
   {
@@ -37,6 +38,16 @@ const workActions = [
 ]
 
 export default function DashboardPage() {
+  // Each figure is counted from the data its tile links to, so the number and
+  // the destination can never disagree.
+  const skills = getAllSkills()
+  const stats = [
+    { value: skills.length, label: "BA skills in the library", href: "/skills", tone: "text-sol-gold" },
+    { value: new Set(skills.map((s) => s.source)).size, label: "source books distilled", href: "/skills", tone: "text-sol-info" },
+    { value: frameworks.length, label: "decision frameworks", href: "/frameworks", tone: "text-sol-violet" },
+    { value: learningPaths.length, label: "role-based learning paths", href: "/paths", tone: "text-sol-mint" },
+  ]
+
   const completed = userProgress.filter((item) => item.completed_at).length
   const scored = userProgress.filter((item) => item.score > 0)
   const averageScore = scored.length
@@ -65,6 +76,21 @@ export default function DashboardPage() {
             Start a decision brief <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <Link
+            key={stat.label}
+            href={stat.href}
+            className="flex items-center gap-4 rounded-2xl border border-white/[0.09] bg-white/[0.02] px-5 py-4 transition hover:border-white/[0.16] hover:bg-white/[0.04]"
+          >
+            <span className={`font-display text-[38px] font-extrabold leading-none ${stat.tone}`}>
+              {stat.value}
+            </span>
+            <span className="text-sm leading-5 text-muted-foreground">{stat.label}</span>
+          </Link>
+        ))}
       </section>
 
       <section>
