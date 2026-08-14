@@ -44,6 +44,10 @@ export interface Requirement {
   status: RequirementStatus
   priority: Priority
   acceptance_criteria: string[]
+  /** Business goal this requirement exists to serve. Null means it is an orphan. */
+  goal: string | null
+  /** Test references covering this requirement. Empty means it is a gap. */
+  tests: string[]
   version: number
   created_at: string
   updated_at: string
@@ -57,4 +61,6 @@ export interface CreateRequirementInput {
   kind?: RequirementKind
   priority?: Priority
   acceptance_criteria?: string[]
+  goal?: string | null
+  tests?: string[]
 }

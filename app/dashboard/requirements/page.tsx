@@ -84,6 +84,8 @@ export default function RequirementsPage() {
   const [kind, setKind] = useState<RequirementKind>("business")
   const [priority, setPriority] = useState<Priority>("medium")
   const [criteria, setCriteria] = useState("")
+  const [goal, setGoal] = useState("")
+  const [tests, setTests] = useState("")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
@@ -174,7 +176,8 @@ export default function RequirementsPage() {
     const acceptanceCriteria = criteria.split("\n").map((item) => item.trim()).filter(Boolean)
     try {
       let requirement: Requirement
-      const payload = { title: title.trim(), description: description.trim(), kind, priority, acceptance_criteria: acceptanceCriteria }
+      const testRefs = tests.split("\n").map((item) => item.trim()).filter(Boolean)
+      const payload = { title: title.trim(), description: description.trim(), kind, priority, acceptance_criteria: acceptanceCriteria, goal: goal.trim() || null, tests: testRefs }
       if (isSupabaseConfigured) {
         requirement = (await api<{ requirement: Requirement }>(`/api/workspaces/${workspaceId}/requirements`, {
           method: "POST",
@@ -193,6 +196,8 @@ export default function RequirementsPage() {
       setTitle("")
       setDescription("")
       setCriteria("")
+      setGoal("")
+      setTests("")
       setKind("business")
       setPriority("medium")
     } catch (caught) {
@@ -261,6 +266,10 @@ export default function RequirementsPage() {
                 <div className="space-y-2"><Label>Priority</Label><Select value={priority} onValueChange={(value) => setPriority(value as Priority)} disabled={!workspaceId}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["low", "medium", "high", "critical"].map((value) => <SelectItem key={value} value={value}>{value[0].toUpperCase() + value.slice(1)}</SelectItem>)}</SelectContent></Select></div>
               </div>
               <div className="space-y-2"><Label htmlFor="criteria">Acceptance criteria</Label><Textarea id="criteria" value={criteria} onChange={(event) => setCriteria(event.target.value)} rows={4} placeholder="One criterion per line" disabled={!workspaceId} /></div>
+              {/* The two traceability links. Left empty a requirement is an
+                  orphan (no goal) or a gap (no test) in the matrix. */}
+              <div className="space-y-2"><Label htmlFor="goal">Business goal</Label><Input id="goal" value={goal} onChange={(event) => setGoal(event.target.value)} maxLength={240} placeholder="Cut onboarding time 40%" disabled={!workspaceId} /><p className="text-xs text-muted-foreground">Why this exists. Without it the requirement is an orphan.</p></div>
+              <div className="space-y-2"><Label htmlFor="tests">Tests</Label><Textarea id="tests" value={tests} onChange={(event) => setTests(event.target.value)} rows={3} placeholder="One test reference per line" disabled={!workspaceId} /><p className="text-xs text-muted-foreground">How you would show it is met. Without one it is a gap.</p></div>
               <Button className="h-11 w-full rounded-full font-semibold shadow-[0_10px_32px_-14px_rgba(239, 125, 69,0.85)]" type="submit" disabled={saving || !workspaceId || !title.trim()}>{saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} Add draft</Button>
             </form>
           </CardContent>

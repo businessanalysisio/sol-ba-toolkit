@@ -10,6 +10,8 @@ const createSchema = z.object({
   kind: z.enum(["business", "stakeholder", "functional", "non_functional", "transition"]).optional(),
   priority: z.enum(["low", "medium", "high", "critical"]).optional(),
   acceptance_criteria: z.array(z.string().trim().min(1).max(2_000)).max(50).optional(),
+  goal: z.string().trim().max(240).nullable().optional(),
+  tests: z.array(z.string().trim().min(1).max(240)).max(50).optional(),
 })
 
 async function authenticate(request: Request) {

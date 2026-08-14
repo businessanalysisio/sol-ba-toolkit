@@ -46,6 +46,8 @@ export class WorkspaceRepository {
         kind: input.kind ?? "business",
         priority: input.priority ?? "medium",
         acceptance_criteria: input.acceptance_criteria ?? [],
+        goal: input.goal ?? null,
+        tests: input.tests ?? [],
       })
       .select()
       .single()
