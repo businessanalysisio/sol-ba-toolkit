@@ -91,6 +91,13 @@ function parseTime(label: string) {
 const DAY_START = 9 * 60
 const DAY_END = 18 * 60
 
+/** Meter fill and track are steps of one hue, chosen by how healthy the level is. */
+function meterTone(pct: number) {
+  if (pct >= 80) return { fill: "bg-sol-mint", track: "bg-sol-mint/15" }
+  if (pct >= 60) return { fill: "bg-sol-gold", track: "bg-sol-gold/15" }
+  return { fill: "bg-sol-coral", track: "bg-sol-coral/15" }
+}
+
 export default function DailyWorkflowPage() {
   // Rendered on the server too, so the clock starts null and fills in after
   // mount — otherwise server and client disagree and hydration warns.
@@ -331,7 +338,7 @@ export default function DailyWorkflowPage() {
           <div className="w-full lg:w-72">
             <div className="rounded-2xl border border-white/[0.07] bg-black/20 p-5">
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Local time</p>
-              <p className="mt-2 font-mono text-5xl font-semibold tabular-nums tracking-tight text-white">
+              <p className="mt-2 text-5xl font-semibold tabular-nums tracking-tight text-white">
                 {now
                   ? now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })
                   : "--:--"}
@@ -498,8 +505,8 @@ export default function DailyWorkflowPage() {
                       } ${isPast ? "opacity-50" : ""}`}
                     >
                       <div className="flex min-w-0 items-center gap-4">
-                        <div className="w-16 shrink-0 text-right">
-                          <div className="font-mono text-sm tabular-nums text-white">{meeting.time}</div>
+                        <div className="w-[76px] shrink-0 text-right">
+                          <div className="whitespace-nowrap text-sm tabular-nums text-white">{meeting.time}</div>
                           <div className="text-xs text-muted-foreground">{meeting.duration}</div>
                         </div>
                         <div className="min-w-0">
@@ -613,14 +620,17 @@ export default function DailyWorkflowPage() {
                         {metric.change}
                       </span>
                     </div>
-                    {metric.pct !== undefined && (
-                      <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/[0.07]">
-                        <div
-                          className={`h-full rounded-full ${isGood ? "bg-sol-mint/70" : "bg-sol-coral/70"}`}
-                          style={{ width: `${metric.pct}%` }}
-                        />
-                      </div>
-                    )}
+                    {metric.pct !== undefined && (() => {
+                      // The meter shows the level, so its fill carries the severity of
+                      // the value. The direction of the change is the delta chip's job —
+                      // 94% completion is a good level even when it slipped 2 points.
+                      const meter = meterTone(metric.pct)
+                      return (
+                        <div className={`mt-2 h-1 overflow-hidden rounded-full ${meter.track}`}>
+                          <div className={`h-full rounded-full ${meter.fill}`} style={{ width: `${metric.pct}%` }} />
+                        </div>
+                      )
+                    })()}
                   </li>
                 )
               })}
