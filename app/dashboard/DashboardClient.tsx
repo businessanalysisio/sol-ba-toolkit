@@ -4,20 +4,8 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import {
-  BarChart3,
-  BookOpen,
-  Bot,
-  BrainCircuit,
-  CalendarDays,
-  ChevronDown,
-  ClipboardList,
-  FileText,
-  Home,
-  Library,
-  LogOut,
-  Plus,
-} from "lucide-react"
+import { BrainCircuit, ChevronDown, LogOut, Plus } from "lucide-react"
+import { frameworks, learningPaths } from "@/lib/mock-data"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -41,22 +29,29 @@ import {
 } from "@/components/ui/sidebar"
 import { isSupabaseConfigured, supabase } from "@/lib/supabase"
 
+// Same routes and labels as before — only the treatment changes. Each section
+// carries a hue, shown as a dot instead of an icon, per the SOL screens.
+// `count` is only set where a real number exists; nothing is invented.
 const navigationItems = [
-  { title: "Home", href: "/dashboard", icon: Home, description: "Learn, work, and improve" },
+  { title: "Home", href: "/dashboard", description: "Learn, work, and improve", dot: "bg-sol-gold" },
   {
     title: "AI analysis",
     href: "/dashboard/ai-workspace",
-    icon: Bot,
     description: "Requirements and BA copilot",
+    dot: "bg-sol-violet",
     badge: "New",
   },
-  { title: "Requirements", href: "/dashboard/requirements", icon: ClipboardList, description: "Capture and review requirements" },
-  { title: "Decision briefs", href: "/brief-builder", icon: FileText, description: "Structure a recommendation" },
-  { title: "Daily workflow", href: "/dashboard/daily-workflow", icon: CalendarDays, description: "Priorities and meetings" },
-  { title: "Learning paths", href: "/paths", icon: BookOpen, description: "Build BA capability" },
-  { title: "Frameworks", href: "/frameworks", icon: Library, description: "Apply proven methods" },
-  { title: "Evidence analysis", href: "/dashboard/data-analysis", icon: BarChart3, description: "Explore data and findings" },
+  { title: "Requirements", href: "/dashboard/requirements", description: "Capture and review requirements", dot: "bg-sol-warn" },
+  { title: "Decision briefs", href: "/brief-builder", description: "Structure a recommendation", dot: "bg-sol-gold" },
+  { title: "Daily workflow", href: "/dashboard/daily-workflow", description: "Priorities and meetings", dot: "bg-sol-info" },
+  { title: "Learning paths", href: "/paths", description: "Build BA capability", dot: "bg-sol-mint", count: learningPaths.length },
+  { title: "Frameworks", href: "/frameworks", description: "Apply proven methods", dot: "bg-sol-violet", count: frameworks.length },
+  { title: "Evidence analysis", href: "/dashboard/data-analysis", description: "Explore data and findings", dot: "bg-sol-mint" },
 ]
+
+function matchesRoute(pathname: string, href: string) {
+  return pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`))
+}
 
 function AppSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
   const pathname = usePathname()
@@ -80,22 +75,36 @@ function AppSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
       <SidebarContent className="px-3 py-5">
         <SidebarMenu>
           {navigationItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`))
+            const isActive = matchesRoute(pathname, item.href)
             return (
               <SidebarMenuItem key={item.href}>
-                {/* h-auto overrides the primitive's fixed h-8: these items are two
-                    lines, and a 32px box clipped the description into the row below. */}
-                <SidebarMenuButton asChild isActive={isActive} tooltip={item.title} className="h-auto">
+                {/* Single line now, so the primitive's h-8 no longer clips —
+                    h-auto is kept because the row is taller than 32px. The
+                    description moves to the tooltip rather than being dropped. */}
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  tooltip={item.description}
+                  className="h-auto"
+                >
                   <Link href={item.href} className="flex items-center gap-3 rounded-xl px-3 py-2.5">
-                    <Icon className="h-4 w-4" />
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-medium">{item.title}</span>
-                        {item.badge && <Badge variant="secondary" className="text-[10px]">{item.badge}</Badge>}
-                      </span>
-                      <span className="mt-0.5 block truncate text-xs text-muted-foreground">{item.description}</span>
+                    <span
+                      aria-hidden
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dot} ${isActive ? "ring-4 ring-white/[0.06]" : "opacity-70"}`}
+                    />
+                    <span className={`flex-1 truncate text-sm ${isActive ? "font-semibold text-white" : "font-medium text-sol-text"}`}>
+                      {item.title}
                     </span>
+                    {item.badge && (
+                      <Badge variant="secondary" className="h-5 rounded-md px-1.5 text-[10px] font-semibold">
+                        {item.badge}
+                      </Badge>
+                    )}
+                    {/* Counts come from the bundled demo dataset. With Supabase
+                        connected the real figure can differ, so don't assert one. */}
+                    {item.count !== undefined && !isSupabaseConfigured && (
+                      <span className="text-xs tabular-nums text-sol-dim">{item.count}</span>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -133,6 +142,8 @@ function AppSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
 export function DashboardClient({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
+  const pathname = usePathname()
+  const pageTitle = navigationItems.find((item) => matchesRoute(pathname, item.href))?.title
 
   useEffect(() => {
     async function loadUser() {
@@ -174,10 +185,18 @@ export function DashboardClient({ children }: { children: React.ReactNode }) {
         {user ? <AppSidebar user={user} onSignOut={handleSignOut} /> : null}
         <SidebarInset className="flex-1">
           {user ? (
-            <header className="flex h-16 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-background/65 px-5 backdrop-blur-xl">
+            <header className="flex h-16 shrink-0 items-center gap-3 border-b border-white/[0.06] bg-background/65 px-5 backdrop-blur-xl">
               <SidebarTrigger className="-ml-1" />
+              {pageTitle && (
+                <h1 className="truncate text-lg font-semibold tracking-tight text-white">{pageTitle}</h1>
+              )}
+              {!isSupabaseConfigured && (
+                <span className="hidden shrink-0 rounded-lg border border-white/[0.14] px-2.5 py-1 text-xs font-medium text-sol-dim sm:inline">
+                  Demo data
+                </span>
+              )}
               <div className="flex-1" />
-              <Button size="sm" className="rounded-full px-4 shadow-[0_8px_28px_-12px_rgba(239, 125, 69,0.8)]" asChild>
+              <Button size="sm" className="rounded-xl px-4 shadow-[0_8px_28px_-12px_rgba(239,125,69,0.8)]" asChild>
                 <Link href="/brief-builder"><Plus className="mr-2 h-4 w-4" /> New brief</Link>
               </Button>
             </header>
