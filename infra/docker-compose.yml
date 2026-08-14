@@ -10,6 +10,12 @@
 #            ("what links here", "what is uncovered two hops out") that are
 #            awkward in SQL and native in Cypher.
 #
+#   ollama — embedding model. Qdrant stores vectors but does not create them.
+#            Running it here rather than as a host install keeps the whole
+#            retrieval stack in one `docker compose up`, and keeps the corpus on
+#            this machine — the same reason the app defaults to a local Claude
+#            login rather than an API key.
+#
 # Postgres/Supabase stays the system of record for requirements. Neither service
 # here is authoritative: both are derived from the wiki and the register, and
 # both can be rebuilt from scratch by re-running ingestion.
@@ -54,7 +60,22 @@ services:
       timeout: 5s
       retries: 10
 
+  ollama:
+    image: ollama/ollama:0.5.7
+    container_name: sol-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 volumes:
   qdrant-storage:
   neo4j-data:
   neo4j-logs:
+  ollama-models:
