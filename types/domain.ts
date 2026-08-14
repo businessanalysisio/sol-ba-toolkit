@@ -1,6 +1,13 @@
 export type WorkspaceRole = "owner" | "admin" | "member" | "viewer"
 export type RequirementKind = "business" | "stakeholder" | "functional" | "non_functional" | "transition"
-export type RequirementStatus = "draft" | "review" | "approved" | "rejected" | "implemented" | "archived"
+export type RequirementStatus =
+  | "draft"
+  | "review"
+  | "approved"
+  | "change_requested"
+  | "rejected"
+  | "implemented"
+  | "archived"
 export type Priority = "low" | "medium" | "high" | "critical"
 
 export interface Workspace {
@@ -60,6 +67,27 @@ export interface CreateRequirementInput {
   description?: string
   kind?: RequirementKind
   priority?: Priority
+  acceptance_criteria?: string[]
+  goal?: string | null
+  tests?: string[]
+}
+
+export interface AuditEvent {
+  id: string
+  workspace_id: string
+  actor_id: string | null
+  entity_type: string
+  entity_id: string
+  action: string
+  changes: Record<string, unknown>
+  created_at: string
+}
+
+export interface UpdateRequirementInput {
+  title?: string
+  description?: string
+  priority?: Priority
+  status?: RequirementStatus
   acceptance_criteria?: string[]
   goal?: string | null
   tests?: string[]

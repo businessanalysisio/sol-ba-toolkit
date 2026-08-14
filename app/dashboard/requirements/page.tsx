@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import { AlertCircle, CheckCircle2, FileText, Loader2, Plus, ShieldCheck } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -283,7 +284,7 @@ export default function RequirementsPage() {
           <CardContent>
             {loading ? <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Loading requirements…</div> : requirements.length ? (
               <div className="space-y-3">{requirements.map((requirement) => (
-                <article key={requirement.id} className="rounded-xl border border-white/[0.07] bg-black/10 p-5 transition hover:border-white/15 hover:bg-white/[0.025]">
+                <Link key={requirement.id} href={`/dashboard/requirements/${requirement.id}`} className="block rounded-xl border border-white/[0.07] bg-black/10 p-5 transition hover:border-white/15 hover:bg-white/[0.025]">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <h2 className="font-semibold text-white">{requirement.title}</h2>
@@ -302,7 +303,7 @@ export default function RequirementsPage() {
                   </div>
                   {requirement.description && <p className="mt-3 text-sm leading-6 text-muted-foreground">{requirement.description}</p>}
                   {requirement.acceptance_criteria.length > 0 && <ul className="mt-3 space-y-1 text-sm text-muted-foreground">{requirement.acceptance_criteria.map((item, index) => <li key={index} className="flex gap-2"><span className="text-sol-mint">✓</span>{item}</li>)}</ul>}
-                </article>
+                </Link>
               ))}</div>
             ) : <div className="grid place-items-center rounded-lg border border-dashed py-12 text-center"><FileText className="h-8 w-8 text-muted-foreground" /><p className="mt-3 font-medium">No requirements yet</p><p className="mt-1 text-sm text-muted-foreground">Capture the first draft to begin the traceable workflow.</p></div>}
           </CardContent>
