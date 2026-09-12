@@ -9,6 +9,11 @@ This documentation set contains the Agentra, EduFlow, OpenEdu, and BA-content st
 - [OpenEdu Documentation](openedu/README.md)
 - [Agentra BA Content Bridge](agentra-ba-content/README.md)
 
+## BA Skill Frameworks
+
+- [Virtual Business Analyst Framework](virtual-business-analyst-framework.md) — eight life-cycle skills (`/ba-*`) plus the `/ba-analyst` router
+- [Nexahelix Helix Pipeline](helix-pipeline-guide.md) — the governed five-stage requirements pipeline (`/helix-*`)
+
 ## Connected LLM Wiki
 
 The markdown files above are connected through the local LLM Wiki:
